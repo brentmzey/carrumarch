@@ -1,27 +1,27 @@
 %%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#E6E6E6', 'primaryTextColor': '#333', 'lineColor': '#007ACC', 'actorBorder': '#4D4D4D'}}}%%
 graph TD
     subgraph "Data Sources (Raw Data)"
-        A[Source 1: Postgres DB <br> (Click Data)]
-        B[Source 2: 3rd Party Realtime API <br> (Recent Click A/B)]
-        C[Source 3: Cloud Bucket <br> (Batch CSV Clicks C)]
+        A["Source 1: Postgres DB\n(Click Data)"]
+        B["Source 2: 3rd Party Realtime API\n(Recent Click A/B)"]
+        C["Source 3: Cloud Bucket\n(Batch CSV Clicks C)"]
     end
 
     subgraph "Ingestion & Orchestration (AWS)"
-        D[Airflow <br> (Daily Orchestration)]
-        E[S3 Data Lake <br> (Raw & Staging)]
-        F[Lambda <br> (CSV Arrival Processing)]
-        G[Fargate <br> (Scheduled Data Jobs)]
+        D["Airflow\n(Daily Orchestration)"]
+        E["S3 Data Lake\n(Raw & Staging)"]
+        F["Lambda\n(CSV Arrival Processing)"]
+        G["Fargate\n(Scheduled Data Jobs)"]
     end
 
     subgraph "Data Warehouse & Transformation"
-        H[Snowflake <br> (Centralized Data Storage)]
-        I[dbt <br> (SQL Data Transformations)]
+        H["Snowflake\n(Centralized Data Storage)"]
+        I["dbt\n(SQL Data Transformations)"]
     end
 
     subgraph "Reverse ETL & Data Delivery"
-        J[Fargate <br> (Transform & Deliver)]
-        K[Marketing SFTP<br> (CSV Upload)]
-        L[Marketing API<br> (JSON Push)]
+        J["Fargate\n(Transform & Deliver)"]
+        K["Marketing SFTP\n(CSV Upload)"]
+        L["Marketing API\n(JSON Push)"]
     end
 
     %% Data Flow
