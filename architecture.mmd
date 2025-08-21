@@ -1,44 +1,44 @@
 %%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#E6E6E6', 'primaryTextColor': '#333', 'lineColor': '#007ACC', 'actorBorder': '#4D4D4D'}}}%%
 graph TD
     subgraph "Data Sources (Raw Data)"
-        A["Source 1: Postgres DB\n(Click Data)"]
-        B["Source 2: 3rd Party Realtime API\n(Recent Click A/B)"]
-        C["Source 3: Cloud Bucket\n(Batch CSV Clicks C)"]
+        A["Source 1: Postgres DB (Click Data)"]
+        B["Source 2: 3rd Party API (Recent Click A/B)"]
+        C["Source 3: Cloud Bucket (CSV Clicks on C)"]
     end
 
     subgraph "Ingestion & Orchestration (AWS)"
-        D["Airflow\n(Daily Orchestration)"]
-        E["S3 Data Lake\n(Raw & Staging)"]
-        F["Lambda\n(CSV Arrival Processing)"]
-        G["Fargate\n(Scheduled Data Jobs)"]
+        D["Airflow (Orchestration)"]
+        E["S3 Data Lake (Raw & Staging)"]
+        F["Lambda (CSV Processing)"]
+        G["Fargate (Data Jobs)"]
     end
 
     subgraph "Data Warehouse & Transformation"
-        H["Snowflake\n(Centralized Data Storage)"]
-        I["dbt\n(SQL Data Transformations)"]
+        H["Snowflake (Data Warehouse)"]
+        I["dbt (SQL Transformations)"]
     end
 
     subgraph "Reverse ETL & Data Delivery"
-        J["Fargate\n(Transform & Deliver)"]
-        K["Marketing SFTP\n(CSV Upload)"]
-        L["Marketing API\n(JSON Push)"]
+        J["Fargate (Deliver)"]
+        K["Marketing SFTP (CSV Upload)"]
+        L["Marketing API (JSON Push)"]
     end
 
     %% Data Flow
     D -- "Trigger Job" --> G
-    A -- "Extract User Clicks Daily" --> G
-    B -- "API Fetch Recent Clicks" --> G
-    G -- "Store Parquet Files" --> E
+    A -- "Extract Daily Clicks" --> G
+    B -- "Fetch Recent Clicks" --> G
+    G -- "Store Parquet in S3" --> E
 
-    C -- "Trigger on File Arrival" --> F
-    F -- "Process & Store" --> E
+    C -- "On File Arrival" --> F
+    F -- "Process & Store in S3" --> E
 
-    E -- "Load into" --> H
+    E -- "Load into Snowflake" --> H
 
-    D -- "Run SQL Transformations" --> I
-    I -- "Optimized Click Data" --> H
+    D -- "Run SQL Models" --> I
+    I -- "Optimize Click Data" --> H
 
-    D -- "Prepare Delivery" --> J
+    D -- "Prepare Data Delivery" --> J
     H -- "Query User Segments" --> J
-    J -- "Generate & Upload CSV" --> K
-    J -- "Post JSON Data" --> L
+    J -- "Upload CSV" --> K
+    J -- "Post JSON" --> L
