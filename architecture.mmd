@@ -6,11 +6,11 @@ graph TD
         C["Source 3: Cloud Bucket (CSV Clicks on C)"]
     end
 
-    subgraph "Ingestion & Orchestration (AWS)"
-        D["Airflow (Orchestration)"]
+    subgraph "Ingestion & Orchestration (AWS Serverless)"
+        D["AWS Step Functions (Orchestration)"]
         E["S3 Data Lake (Raw & Staging)"]
-        F["Lambda (CSV Processing)"]
-        G["Fargate (Data Jobs)"]
+        F["Lambda (CSV Processing & Data Enrichment)"]
+        G["Lambda (Data Extraction)"]
     end
 
     subgraph "Data Warehouse & Transformation"
@@ -19,13 +19,13 @@ graph TD
     end
 
     subgraph "Reverse ETL & Data Delivery"
-        J["Fargate (Deliver)"]
+        J["Lambda (Data Delivery)"]
         K["Marketing SFTP (CSV Upload)"]
         L["Marketing API (JSON Push)"]
     end
 
     %% Data Flow
-    D -- "Trigger Job" --> G
+    D -- "Coordinate Workflow" --> G
     A -- "Extract Daily Clicks" --> G
     B -- "Fetch Recent Clicks" --> G
     G -- "Store Parquet in S3" --> E
@@ -35,8 +35,8 @@ graph TD
 
     E -- "Load into Snowflake" --> H
 
-    D -- "Run SQL Models" --> I
-    I -- "Optimize Click Data" --> H
+    D -- "Invoke SQL Models via dbt" --> I
+    I -- "Execute and Optimize" --> H
 
     D -- "Prepare Data Delivery" --> J
     H -- "Query User Segments" --> J

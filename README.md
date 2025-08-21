@@ -1,56 +1,75 @@
-# Data Pipeline Architecture for Carrum Health
+# Carrum Health Data Pipeline Architecture
 
-This project outlines a data pipeline architecture designed to empower data-driven marketing campaigns by utilizing data from multiple sources. The architecture is visualized using Mermaid.js and provides a scalable and cost-effective solution for processing and delivering click data to marketing platforms.
+Welcome! This repository documents the data pipeline architecture designed for Carrum Health’s marketing analytics. The goal is to empower the marketing team with timely, reliable insights by connecting multiple data sources and automating the flow from raw data to actionable information.
 
-## Overview
+## Why This Matters
 
-The architecture is designed to handle data ingestion, transformation, and delivery across a variety of platforms and formats, enabling real-time insights into user interactions with a simple (pretend) app.
+Marketing teams thrive on fresh, accurate data. By integrating diverse sources—ranging from app click logs to third-party APIs and cloud-based CSVs—this pipeline ensures that every campaign is informed by the latest user interactions. The architecture is built to scale, so whether you’re reaching thousands or millions, the data keeps up.
 
-## Architecture Components
+## What’s Inside
 
-- **Data Sources**:
-  - **Postgres DB**: Storing first-party click data from the app backend.
-  - **3rd Party Realtime API**: Providing the most recent click timestamps for buttons A and B.
-  - **Cloud Bucket**: Delivering batch CSV files containing historical click data for button C.
+- **Data Sources**  
+  - *Postgres Database*: Stores click data from the app backend.
+  - *Third-Party API*: Provides real-time click events for specific buttons.
+  - *Cloud Bucket*: Delivers batch CSV files with historical click data.
 
-- **Ingestion & Orchestration** (AWS):
-  - **Airflow**: Schedules and orchestrates daily data processing workflows.
-  - **S3 Data Lake**: Stores raw and staging data in Parquet format for efficient processing.
-  - **Lambda**: Processes CSV file arrivals and stores them in S3.
-  - **Fargate**: Runs scheduled tasks for extracting data and preparing it for transformation.
+- **Ingestion & Orchestration**  
+  - *AWS Step Functions*: Coordinates the entire workflow, ensuring each step happens in the right order.
+  - *S3 Data Lake*: Holds both raw and processed data, making it easy to access and analyze.
+  - *Lambda Functions*: Handle everything from CSV processing to data enrichment and extraction.
 
-- **Data Warehouse & Transformation**:
-  - **Snowflake**: Centralizes data storage and facilitates queries at scale.
-  - **dbt (Data Build Tool)**: Implements SQL transformations to prepare optimized click data.
+- **Data Warehouse & Transformation**  
+  - *Snowflake*: Central repository for all analytics-ready data.
+  - *dbt (Data Build Tool)*: Transforms raw data into clean, insightful models using SQL.
 
-- **Reverse ETL & Data Delivery**:
-  - **Fargate**: Facilitates transformation and delivery of data to marketing systems.
-  - **Marketing SFTP**: Supports the bulk upload of CSV files.
-  - **Marketing API**: Sends JSON payloads to update user profiles in real-time.
+- **Reverse ETL & Data Delivery**  
+  - *Lambda Functions*: Prepare and deliver data to marketing platforms.
+  - *Marketing SFTP*: Supports bulk uploads via CSV.
+  - *Marketing API*: Sends JSON payloads for real-time profile updates.
 
-## Data Flow
+## How Data Flows
 
-1. **Extraction**: Airflow triggers extraction jobs using Fargate to pull data from Postgres and the 3rd party API.
-2. **File Processing**: Lambda processes CSV arrivals and loads data into the S3 Data Lake.
-3. **Loading**: Data is loaded into Snowflake from S3.
-4. **Transformation**: dbt runs SQL models to transform raw data into user segments with recent click aggregation.
-5. **Delivery**: Transformed data is prepared for delivery to the marketing platform via SFTP or API.
+1. **Extraction**: Step Functions trigger Lambda jobs to pull data from the database and API.
+2. **File Processing**: Lambda functions process incoming CSV files and store them in S3.
+3. **Loading**: Data moves from S3 into Snowflake for centralized storage.
+4. **Transformation**: dbt runs SQL models to clean and optimize the data.
+5. **Delivery**: Lambda functions send the final datasets to marketing platforms, either as CSVs or JSON.
 
-## Key Features
+## Features That Make a Difference
 
-- **Scalable and Cost-Efficient**: Utilizes AWS serverless technologies to optimize costs and scale with demand.
-- **Data Freshness**: Ensures all delivered data is recent and aligns with marketing strategies.
-- **Complex Transformations**: Leverages dbt and Snowflake for robust data processing and transformation logic.
+- **Serverless by Design**: Built on AWS, the pipeline scales automatically and minimizes maintenance.
+- **Data Freshness**: Ensures marketing always works with the most up-to-date information.
+- **Quality Control**: Validation checks are woven throughout to maintain data integrity.
+- **ELT Approach**: Raw data is stored first, then transformed as needed for flexibility and transparency.
 
-## Assumptions & Considerations
+## Looking Ahead
 
-- Designed to handle approximately 10 million users.
-- Data quality and validation checks at each integration point ensure reliability.
-- Strategic use of ELT processes by storing raw data initially, then transforming as needed.
+- Adding new data sources to enrich insights.
+- Exploring real-time analytics for instant feedback on campaigns.
 
-## Future Enhancements
+## Viewing the Architecture Diagram
 
-- Integration with additional data sources.
-- Real-time analytics for immediate campaign adaptability and insights.
+The pipeline is visualized using Mermaid.js. You can view or edit the diagram using any of these methods:
 
-This architecture provides a comprehensive solution for delivering actionable insights to the Carrum Health marketing team, enabling targeted and effective data-driven campaigns.
+### 1. Mermaid Live Editor
+
+- Visit [Mermaid Live Editor](https://mermaid-js.github.io/mermaid-live-editor/)
+- Copy the contents of [`architecture.mmd`](architecture.mmd) and paste them into the editor.
+
+### 2. Local Markdown Editor
+
+- Use an editor like Typora or Visual Studio Code with a Mermaid extension.
+- Open the diagram file and enable preview to see the visualization.
+
+### 3. Command Line (Mermaid CLI)
+
+- Install Mermaid CLI:
+  ```bash
+  npm install -g @mermaid-js/mermaid-cli
+  ```
+- Generate a PNG from the diagram:
+  ```bash
+  mmdc -i architecture.mmd -o diagram.png
+  ```
+
+---
