@@ -1,0 +1,24 @@
+{
+  "name": "carrum-de-arch",
+  "version": "1.0.0",
+  "description": "Architecture for an optimized data engineering workflow",
+  "homepage": "https://github.com/brentmzey/carrumarch#readme",
+  "bugs": {
+    "url": "https://github.com/brentmzey/carrumarch/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/brentmzey/carrumarch.git"
+  },
+  "license": "ISC",
+  "author": "Brent Zey",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "generate-diagrams": "mmdc -i architecture.mmd -o architecture.png && mmdc -i azure-architecture.mmd -o azure-architecture.png"
+  },
+  "devDependencies": {
+    "@mermaid-js/mermaid-cli": "^8.11.0"
+  }
+}
